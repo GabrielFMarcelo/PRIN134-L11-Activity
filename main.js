@@ -57,15 +57,21 @@ function moveTarget(target) {
   target.style.top = `${randomY}px`;
 }
 
+function resetGame() {
+  score = 0;
+  currentIndex = 1;
+  scoreBoard.textContent = "Score: " + score;
+  gameArea.innerHTML = "";
+  newTarget();
+}
+
 gameArea.addEventListener('contextmenu', function(event) {
   event.preventDefault();
 })
 
 document.addEventListener("keydown", function(event) {
   if (event.ctrlKey && event.key.toLowerCase() === "o") {
-    score = 0;
-    currentIndex = 1;
-    scoreBoard.textContent = "Score: " + score;
+    resetGame();
     event.preventDefault();
   }
 });
