@@ -26,6 +26,9 @@ body {
   color: white;
   text-align: center;
   font-size: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #scoreBoard {

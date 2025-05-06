@@ -2,28 +2,46 @@ const gameArea = document.getElementById('gameArea');
 const scoreBoard = document.getElementById('scoreBoard');
 
 let score = 0;
-const array = [];
+let currentIndex = 1;
+let totalTargets = 0;
 
 function newTarget() {
   const inputElement = document.getElementById("input");
-  const inputValue = inputElement.value;
+  const inputValue = parseInt(inputElement.value);
+
+  if (score === totalTargets) {
+    currentIndex = 1;
+    score = 0;
+    scoreBoard.textContent = "Score: " + score;
+  }
+
+  totalTargets = inputValue;
   gameArea.innerHTML = "";
 
-  for (let i = 0; i < inputValue; i++) {
+  for (let i = 1; i <= inputValue; i++) {
     const target = document.createElement("div");
-    target.classList.add("target")
+    target.classList.add("target");
     target.textContent = i;
+    target.dataset.index = i;
 
     target.addEventListener('contextmenu', function(event) {
       event.preventDefault();
-      score++;
-      scoreBoard.textContent = "Score: " + score;
-      moveTarget(target);
-      return false;
+      const index = parseInt(target.dataset.index);
+
+      if (index === currentIndex) {
+        target.remove();
+        score++;
+        scoreBoard.textContent = "Score: " + score;
+        currentIndex++;
+
+        if (score == totalTargets) {
+          setTimeout(() => newTarget(), 500);
+        }
+      }
     });
+
     gameArea.appendChild(target);
     moveTarget(target);
-    array.push(i[0])
   }
 }
 
@@ -39,10 +57,14 @@ function moveTarget(target) {
   target.style.top = `${randomY}px`;
 }
 
+gameArea.addEventListener('contextmenu', function(event) {
+  event.preventDefault();
+})
 
 document.addEventListener("keydown", function(event) {
   if (event.ctrlKey && event.key.toLowerCase() === "o") {
     score = 0;
+    currentIndex = 1;
     scoreBoard.textContent = "Score: " + score;
     event.preventDefault();
   }
